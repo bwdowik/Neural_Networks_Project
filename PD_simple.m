@@ -69,14 +69,15 @@ new_train_data_out = [];
 new_train_data_in1 = [];
 new_train_data_in2 = [];
 
-% Making sure we're only using the "easy" separable data
+
+
 for j=1:length(train_data_out)
     if train_data_out(j) == 0
         new_train_data_out = [new_train_data_out; train_data_out(j)];
         new_train_data_in1 = [new_train_data_in1; train_data_in1(j)];
         new_train_data_in2 = [new_train_data_in2; train_data_in2(j)];
         plot(train_data_in1(j),train_data_in2(j),'.b','MarkerSize',10); %healthy
-    elseif (train_data_out(j) == 1) && (train_data_in1(j)>0.006)
+    elseif (train_data_out(j) == 1)
         new_train_data_out = [new_train_data_out; train_data_out(j)];
         new_train_data_in1 = [new_train_data_in1; train_data_in1(j)];
         new_train_data_in2 = [new_train_data_in2; train_data_in2(j)];
@@ -86,7 +87,7 @@ end
 
 training_inputs = [new_train_data_in1 new_train_data_in2]';
 training_outputs = new_train_data_out';
-
+save('basic_parkinsons', 'training_inputs','training_outputs')
 tic
 net1 = perceptron('hardlim','learnp');
 net1 = train(net1,training_inputs,training_outputs);
