@@ -1,0 +1,61 @@
+%% Steepest descent backpropogation algorithm
+clear all
+
+syms p;
+syms G(p);
+G(p) = 1 + sin(pi*p/2);
+p_vals = linspace(-2,2,100);
+
+plot(p_vals,G(p_vals))
+xlabel('p')
+ylabel('G(p)')
+
+W_initial = rand(2,2)
+b_initial = rand(2,1)
+
+alpha = 0.01;
+input = 2;
+M = 2;
+
+%% set up F
+
+
+
+
+
+
+
+%%
+
+%propagate input forward
+a(1)=p;
+for m=1:M
+    a(m+1) = f(m+1)*(W(m+1)*a(m)+b(m+1));
+end
+a_final = a(M+1);
+
+%propagate sensitivities backward
+s(M+1) = -2*F(M+1)*n(M+1)*(t-a_final); %fix F
+for m=M:-1:1
+    s(m) = F(m)*n(m)*W(m+1)'*s(m+1); %fix F
+end
+
+%update weights and biases using steepest descent
+W(m,k+1)=W(m,k) - alpha*s(m)*a(m-1)';
+b(m,k+1) = b(m,k)-alpha*s(m);
+
+
+
+
+%% Functions
+
+function output = F_logsig(n)
+    for q=1:length(n)
+        vector(q)=fsig(n(q))
+    output = vector*eye(length(n));
+end
+
+function output2 = fsig(x)
+    output2 = logsig(x)*(1-logsig(x));
+end
+
