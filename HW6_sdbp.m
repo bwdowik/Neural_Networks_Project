@@ -1,4 +1,4 @@
-%% HW6_part 1
+%% HW6_part 1, SDBP
 
 clear all
 clc
@@ -9,7 +9,7 @@ syms G(p);
 G(p) = 1 + sin(pi*p/2);
 p_vals = linspace(-2,2,100);
 alpha = 0.1;
-batch_size=1;
+batch_size=5;
 k=1;
 target = double(G(p_vals));
 
@@ -74,7 +74,7 @@ for k=1:1000
     error(k) = sum((target-netoutput).^2)/length(target);   
 end
 
-
+%% 
 figure(1)
 hold on
 plot(p_vals,myNet(p_vals, W1(:,k+1),W2(k+1,:),b1(:,k+1),b2(k+1)))
@@ -89,6 +89,31 @@ plot(error)
 xlabel('iteration')
 ylabel('mean square error')
 
+%ptest_vals = (rand(1,20)-0.5)*4;
+%Using the same 20 random test values every time
+ptest_vals =     [ 0.0411;
+   -0.4826;
+    0.7391;
+   -1.1862;
+   -1.6137;
+    1.6544;
+   -1.3299;
+    1.4611;
+    1.7386;
+    1.7941;
+    1.1104;
+   -1.3602;
+   -1.3662;
+    0.8122;
+   -1.3203;
+   -0.0271;
+    0.5895;
+    1.1679;
+   -1.9711;
+   -0.6896 ]';
+finaltarget = double(G(ptest_vals));
+finalnetoutput=myNet(ptest_vals, W1(:,k+1),W2(k+1,:),b1(:,k+1),b2(k+1));
+finalerror = sum((finaltarget-finalnetoutput).^2)/length(finaltarget) 
 
 function output = f1(a)
     output = (1-a)*a;
