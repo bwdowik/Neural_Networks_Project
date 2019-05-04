@@ -34,11 +34,10 @@ t=train_data_out';
 % 'trainlm' is usually fastest.
 % 'trainbr' takes longer but may be better for challenging problems.
 % 'trainscg' uses less memory. Suitable in low memory situations.
-trainFcn = 'trainbr'; 
+trainFcn = 'trainscg';  % Scaled conjugate gradient backpropagation.
 
 % Create a Pattern Recognition Network
-%not sure what best number of neurons is
-hiddenLayerSize =5;
+hiddenLayerSize = 7;
 net = patternnet(hiddenLayerSize, trainFcn);
 
 % Setup Division of Data for Training, Validation, Testing
@@ -48,21 +47,22 @@ net.divideParam.testRatio = 15/100;
 
 % Train the Network
 [net,tr] = train(net,x,t);
+plotconfusion
 
 % Test the Network (with training dataset)
 y_train = net(x);
 e = gsubtract(t,y_train);
 performance_train = perform(net,t,y_train)
 tind = vec2ind(t);
-yind = vec2ind(y_train);
+yind = vec2ind(y);
 percentErrors = sum(tind ~= yind)/numel(tind);
-y=round(y_train);
+y=round(y);
 
 % Test the Network (with testing dataset)
 y_test = net(test_data_in');
 e = gsubtract(test_data_in',y_test);
-performance_test = perform(net,test_data_out',y_test)
-tind = vec2ind(test_data_out');
+performance_test = perform(net,t,y_test)
+tind = vec2ind(t);
 yind = vec2ind(y_test);
 percentErrors = sum(tind ~= yind)/numel(tind);
 y_test=round(y_test);
@@ -75,7 +75,7 @@ y_test=round(y_test);
 %figure, plotperform(tr)
 %figure, plottrainstate(tr)
 %figure, ploterrhist(e)
-figure, plotconfusion(t,y)
+%figure, plotconfusion(t,y)
 %figure, plotroc(t,y)
 
 
@@ -92,6 +92,8 @@ figure, plotconfusion(t,y)
 % end
 % 
 % hold off
+
+
 
 
 function decisionBoundary(net,inputData)
